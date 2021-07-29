@@ -3,15 +3,24 @@ from fastapi import FastAPI, Query
 from utils import *
 from typing import Optional
 from typing import List
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+origins = ["*"]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/")
 def root():
     return {"message": "Welcome to the Server!"}
 
 @app.get("/equities/quote")
-async def quote(ticker: str, columns: Optional[List[str]] = Query(["marketCap"])):
+async def quote(ticker: str, columns: Optional[List[str]] = Query(["marketCap","regularMarketPrice"])):
     return_dict = {}
     ticker_data = get_data(ticker)
     for col in columns:
@@ -19,5 +28,5 @@ async def quote(ticker: str, columns: Optional[List[str]] = Query(["marketCap"])
     return return_dict
 
 @app.get("/equities/valuation/uranium")
-async def valuation(ticker: str, uranium_price: float):
-    return {"value": get_uranium_miner_valuation(ticker, uranium_price)}
+async def valuation(ticker: str, uranium_price: float, multiple: float = 1.0):
+    return {"value": multiple * get_uranium_miner_valuation(ticker, uranium_price)}
