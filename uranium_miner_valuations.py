@@ -70,4 +70,33 @@ def get_paladin_energy_valuation(price, discount_rate=0.08):
     NPV_EXPLORATION_PROPERTIES = 250 * 0.5
     return NPV_LARGER_HEINRICH_PDN_SHARE + NPV_EXPLORATION_PROPERTIES
 
-print(get_global_atomic_valuation(35))
+def get_denison_mines_valuation(price, discount_rate=0.08):
+    #PHOENIX
+    OPEX_LB = 3.33
+    CAPEX = 322.5
+    yearly_production = np.array([0, 0, 0, 0, 2.364, 5.91, 5.91, 5.91, 5.91, 5.91, 5.91, 5.91, 5.91, 5.91, 3.213])
+    revenue = yearly_production * price
+    total_OPEX = yearly_production * OPEX_LB
+    op_revenue = revenue - total_OPEX
+    royalty_rate = 0.10
+    op_revenue_minus_royalty = op_revenue - (op_revenue * royalty_rate)
+    tax_rate = 0.27
+    taxes_paid = op_revenue_minus_royalty * tax_rate
+    taxes_paid[0:6] = 0
+    income = op_revenue_minus_royalty - taxes_paid
+    PV = get_PV_from_income(income, discount_rate)
+    NPV_PHOENIX = PV - CAPEX
+    NPV_PHOENIX_DENISON_SHARE = NPV_PHOENIX * 0.90
+    #GRYPHON
+    NPV_GRYPHON = 50
+    #WATERBURY
+    NPV_WATERBURY = 34
+    #NET DEBT
+    NET_DEBT = 122
+    #PHYSICAL
+    NPV_PHYSICAL = 2.5 * price
+    #JCU
+    NPV_JCU = 25
+
+    return NPV_PHOENIX_DENISON_SHARE + NPV_GRYPHON + NPV_WATERBURY + NPV_PHYSICAL + NPV_JCU + NET_DEBT
+

@@ -12,5 +12,7 @@ def get_uranium_miner_valuation(ticker, price, discount_rate=0.08):
         return get_bannerman_energy_valuation(price, discount_rate)
     elif ticker == "PALAF":
         return get_paladin_energy_valuation(price, discount_rate)
+    elif ticker == "DNN":
+        return get_denison_mines_valuation(price, discount_rate)
     else:
         return 0
