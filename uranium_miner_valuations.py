@@ -91,12 +91,46 @@ def get_denison_mines_valuation(price, discount_rate=0.08):
     NPV_GRYPHON = 50
     #WATERBURY
     NPV_WATERBURY = 34
-    #NET DEBT
-    NET_DEBT = 122
+    #NET CASH
+    NET_CASH = 122
     #PHYSICAL
     NPV_PHYSICAL = 2.5 * price
     #JCU
     NPV_JCU = 25
 
-    return NPV_PHOENIX_DENISON_SHARE + NPV_GRYPHON + NPV_WATERBURY + NPV_PHYSICAL + NPV_JCU + NET_DEBT
+    return NPV_PHOENIX_DENISON_SHARE + NPV_GRYPHON + NPV_WATERBURY + NPV_PHYSICAL + NPV_JCU + NET_CASH
+
+def get_ur_energy_valuation(price, discount_rate=0.08):
+    #NPV Lost Creek
+    yearly_production = np.array([0.5,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1])
+    revenue = yearly_production * price
+    OPEX_LB = 14.58
+    CAPEX = 15.4
+    total_OPEX = yearly_production * OPEX_LB
+    op_revenue = revenue - total_OPEX
+    royalty_rate = 0.05
+    op_revenue_minus_royalty = op_revenue - (op_revenue * royalty_rate)
+    TAX_LB = 7.32
+    taxes_paid = yearly_production * TAX_LB
+    income = op_revenue_minus_royalty - taxes_paid
+    PV = get_PV_from_income(income, discount_rate)
+    NPV_LOST_CREEK = PV - CAPEX
+    #NPV Shirley Basin
+    yearly_production = np.array([0,0.5,0.75,0.75,0.75,0.75,0.75,0.75,0.75,0.75,0.75,0.75])
+    revenue = yearly_production * price
+    OPEX_LB = 14.30
+    CAPEX = 26.2
+    total_OPEX = yearly_production * OPEX_LB
+    op_revenue = revenue - total_OPEX
+    royalty_rate = 0.05
+    op_revenue_minus_royalty = op_revenue - (op_revenue * royalty_rate)
+    taxes_paid = op_revenue_minus_royalty * 0.15
+    income = op_revenue_minus_royalty - taxes_paid
+    PV = get_PV_from_income(income, discount_rate)
+    NPV_SHIRLEY_BASIN = PV - CAPEX
+    #NET DEBT
+    NET_CASH = 12
+    #other projects
+    NPV_OTHER = 20
+    return NPV_LOST_CREEK + NPV_SHIRLEY_BASIN + NPV_OTHER + NET_CASH
 
