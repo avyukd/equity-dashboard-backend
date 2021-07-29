@@ -27,6 +27,10 @@ async def quote(ticker: str, columns: Optional[List[str]] = Query(["marketCap","
         return_dict[col] = ticker_data[col]
     return return_dict
 
-@app.get("/equities/valuation/uranium")
-async def valuation(ticker: str, uranium_price: float, multiple: float = 1.0):
-    return {"value": multiple * get_uranium_miner_valuation(ticker, uranium_price)}
+@app.get("/equities/valuation/{commodity}")
+async def valuation(commodity: str, ticker: str, commodity_price: float, multiple: float = 1.0):
+    commodity = commodity.lower()
+    if commodity == "uranium":
+        return {"value": multiple * get_uranium_miner_valuation(ticker, commodity_price)}
+    else:
+        return {"value":0}
