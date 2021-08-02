@@ -9,11 +9,11 @@ def get_PV_from_income(income, discount_rate):
     PV = sum(CFs)
     return PV
 
-def get_global_atomic_valuation(price, discount_rate=0.08):
+def get_global_atomic_valuation(price, discount_rate=0.08, capex_mult=1.0):
     #DASA MINE PHASE 1
     AISC_LB = 18.39
     TAX_LB = 2.09
-    CAPEX = 203
+    CAPEX = 203 * capex_mult
     yearly_production = np.array([0, 0, 0, 0.482, 4, 4, 4, 4, 4.4, 4.6, 5.1, 5.1, 4, 2, 1.7, 0.05])
     revenues = yearly_production * price
     total_AISC = yearly_production * AISC_LB
@@ -34,9 +34,9 @@ def get_global_atomic_valuation(price, discount_rate=0.08):
     NPV_EXPLORATION_MINE = 30
     return NPV_DASA_PHASE_1 + NPV_DASA_PHASE_2 + NPV_ZINC_MINE + NPV_EXPLORATION_MINE
 
-def get_bannerman_energy_valuation(price, discount_rate=0.08):
+def get_bannerman_energy_valuation(price, discount_rate=0.08, capex_mult=1.0):
     AISC_LB = 41
-    CAPEX = 254
+    CAPEX = 254 * capex_mult
     yearly_production = np.array([0, 0, 0, 3, 4, 4, 4, 3, 5, 3, 3, 3, 4, 3, 3, 3, 1])
     revenue = yearly_production * price
     total_AISC = yearly_production * AISC_LB
@@ -49,8 +49,8 @@ def get_bannerman_energy_valuation(price, discount_rate=0.08):
     NPV_BANNERMAN = PV - CAPEX
     return NPV_BANNERMAN
 
-def get_paladin_energy_valuation(price, discount_rate=0.08):
-    RESTART_COST = 81
+def get_paladin_energy_valuation(price, discount_rate=0.08, capex_mult=1.0):
+    RESTART_COST = 81 * capex_mult
     yearly_production = np.array([0,3.3,5.5,5.9,5.9,5.9,5.9,5.9,5.9,3.5,3.5,3.5,3.5,3.5,3.5,3.5,3.5,2])
     revenue = yearly_production * price
     production_cash_cost_LB = np.array([0, 23, 27.4, 27.4, 27.4, 27.4, 27.4, 27.4, 27.4, 26.5, 26.5, 26.5, 26.5, 26.5, 26.5, 26.5, 26.5, 26.5])
@@ -70,10 +70,10 @@ def get_paladin_energy_valuation(price, discount_rate=0.08):
     NPV_EXPLORATION_PROPERTIES = 250 * 0.5
     return NPV_LARGER_HEINRICH_PDN_SHARE + NPV_EXPLORATION_PROPERTIES
 
-def get_denison_mines_valuation(price, discount_rate=0.08):
+def get_denison_mines_valuation(price, discount_rate=0.08, capex_mult=1.0):
     #PHOENIX
     OPEX_LB = 3.33
-    CAPEX = 322.5
+    CAPEX = 322.5 * capex_mult
     yearly_production = np.array([0, 0, 0, 0, 2.364, 5.91, 5.91, 5.91, 5.91, 5.91, 5.91, 5.91, 5.91, 5.91, 3.213])
     revenue = yearly_production * price
     total_OPEX = yearly_production * OPEX_LB
@@ -100,12 +100,12 @@ def get_denison_mines_valuation(price, discount_rate=0.08):
 
     return NPV_PHOENIX_DENISON_SHARE + NPV_GRYPHON + NPV_WATERBURY + NPV_PHYSICAL + NPV_JCU + NET_CASH
 
-def get_ur_energy_valuation(price, discount_rate=0.08):
+def get_ur_energy_valuation(price, discount_rate=0.08, capex_mult=1.0):
     #NPV Lost Creek
     yearly_production = np.array([0.5,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.1])
     revenue = yearly_production * price
     OPEX_LB = 14.58
-    CAPEX = 15.4
+    CAPEX = 15.4 * capex_mult
     total_OPEX = yearly_production * OPEX_LB
     op_revenue = revenue - total_OPEX
     royalty_rate = 0.05
@@ -134,9 +134,9 @@ def get_ur_energy_valuation(price, discount_rate=0.08):
     NPV_OTHER = 20
     return NPV_LOST_CREEK + NPV_SHIRLEY_BASIN + NPV_OTHER + NET_CASH
 
-def get_azarga_valuation(price, discount_rate=0.08):
+def get_azarga_valuation(price, discount_rate=0.08, capex_mult=1.0):
     #NPV Dewey Burdock
-    CAPEX = 31.672
+    CAPEX = 31.672 * capex_mult
     yearly_production = np.array([0,0,0,0.1260,0.5020,1.0090,1.0090,1.0090,1.0090,0.9460,1.0090,1.0090,1.0090,1.0090,1.0090,1.0090,1.0090,1.0090,0.6310])
     revenue = yearly_production * price
     AISC_LB = 28.88
@@ -159,7 +159,7 @@ def get_azarga_valuation(price, discount_rate=0.08):
     PV = get_PV_from_income(income, discount_rate)
     NPV_GAS_HILLS = PV * 0.5
     #NPV Centennial
-    CAPEX = 71
+    CAPEX = 71 * capex_mult
     yearly_production = np.array([0.0000,0.0000,0.0000,0.7000,0.7000,0.7000,0.7000,0.7000,0.7000,0.7000,0.7000,0.7000])
     revenue = yearly_production * price
     AISC_LB = 40.24
