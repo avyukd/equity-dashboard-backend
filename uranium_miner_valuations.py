@@ -134,3 +134,43 @@ def get_ur_energy_valuation(price, discount_rate=0.08):
     NPV_OTHER = 20
     return NPV_LOST_CREEK + NPV_SHIRLEY_BASIN + NPV_OTHER + NET_CASH
 
+def get_azarga_valuation(price, discount_rate=0.08):
+    #NPV Dewey Burdock
+    CAPEX = 31.672
+    yearly_production = np.array([0,0,0,0.1260,0.5020,1.0090,1.0090,1.0090,1.0090,0.9460,1.0090,1.0090,1.0090,1.0090,1.0090,1.0090,1.0090,1.0090,0.6310])
+    revenue = yearly_production * price
+    AISC_LB = 28.88
+    total_AISC = yearly_production * AISC_LB
+    op_revenue = revenue - total_AISC
+    tax_rate = 0.15
+    taxes_paid = op_revenue * tax_rate
+    income = op_revenue - taxes_paid
+    PV = get_PV_from_income(income, discount_rate)
+    NPV_DEWEY_BURDOCK = PV - CAPEX
+    #NPV Gas Hills
+    yearly_production = np.array([0,0,0,0,0,0.5,1,1,1,1,1,1,1,1,0.5])
+    revenue = yearly_production * price
+    AISC_LB = 30
+    total_AISC = yearly_production * AISC_LB
+    op_revenue = revenue - total_AISC
+    tax_rate = 0.15
+    taxes_paid = op_revenue * tax_rate
+    income = op_revenue - taxes_paid
+    PV = get_PV_from_income(income, discount_rate)
+    NPV_GAS_HILLS = PV * 0.5
+    #NPV Centennial
+    CAPEX = 71
+    yearly_production = np.array([0.0000,0.0000,0.0000,0.7000,0.7000,0.7000,0.7000,0.7000,0.7000,0.7000,0.7000,0.7000])
+    revenue = yearly_production * price
+    AISC_LB = 40.24
+    total_AISC = yearly_production * AISC_LB
+    op_revenue = revenue - total_AISC
+    tax_rate = 0.15
+    taxes_paid = op_revenue * tax_rate
+    income = op_revenue - taxes_paid
+    PV = get_PV_from_income(income, discount_rate)
+    NPV_CENTENNIAL = PV - CAPEX
+    if NPV_CENTENNIAL < 0:
+        NPV_CENTENNIAL = 5
+    NPV_JUNIPER = 3
+    return NPV_DEWEY_BURDOCK + NPV_GAS_HILLS + NPV_CENTENNIAL + NPV_JUNIPER
