@@ -1,10 +1,16 @@
 import yfinance as yf
 from uranium_miner_valuations import *
+from growth_valuations import *
 
 def get_data(ticker):
     s = yf.Ticker(ticker)
     return s.info
 
+def get_growth_valuation(ticker, cagr, discount_rate, terminal_growth_rate, speed_of_convergence):
+    if ticker == "PLTR":
+        return get_pltr_valuation(cagr, discount_rate, terminal_growth_rate, speed_of_convergence)
+    else:
+        return 0
 def get_uranium_miner_valuation(ticker, price, discount_rate=0.08,capex_mult=1.0):
     ticker = ticker.upper()
     if ticker == "GLATF":

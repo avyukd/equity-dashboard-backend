@@ -27,7 +27,7 @@ async def quote(ticker: str, columns: Optional[List[str]] = Query(["marketCap","
         return_dict[col] = ticker_data[col]
     return return_dict
 
-@app.get("/equities/valuation/{commodity}")
+@app.get("/equities/valuation/commodities/{commodity}")
 async def valuation(commodity: str, ticker: str, commodity_price: float, multiple: float = 1.0, 
                     discount_rate: float = 0.08, capex_mult: float = 1.0):
     commodity = commodity.lower()
@@ -36,3 +36,8 @@ async def valuation(commodity: str, ticker: str, commodity_price: float, multipl
         return {"value": multiple * get_uranium_miner_valuation(ticker, commodity_price, discount_rate, capex_mult)}
     else:
         return {"value":0}
+
+@app.get("/equities/valuation/growth")
+async def growth(ticker: str, cagr: float, discount_rate: float = 0.08, 
+                terminal_growth: float = 0.03, speed_of_convergence: float = 2.5):
+    return {"value": get_growth_valuation(ticker, cagr, discount_rate, terminal_growth)}
