@@ -7,6 +7,7 @@ def get_data(ticker):
     return s.info
 
 def get_growth_valuation(ticker, cagr, discount_rate, terminal_growth_rate, speed_of_convergence):
+    ticker = ticker.upper()
     if ticker == "PLTR":
         return get_pltr_valuation(cagr, discount_rate, terminal_growth_rate, speed_of_convergence)
     else:

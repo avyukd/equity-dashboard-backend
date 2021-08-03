@@ -35,8 +35,11 @@ def get_pltr_valuation(CAGR=0.20, discount_rate=0.08,terminal_growth_rate=0.03, 
                 taxable.append(0)
                 carry_losses = carry_losses - EBIT[i]
     taxes_paid = np.array(taxable)*0.27
-    income = revenues-taxes_paid
+    income = EBIT-taxes_paid
     PV = get_PV_from_income(income, discount_rate)
-    return PV
+    print(income)
+    TV = EBIT[-1] / (discount_rate - terminal_growth_rate)
+    TV /= (1 + discount_rate) ** 10
+    return PV + TV
 
 print(get_pltr_valuation(0.3,0.08,0.03,2.5))
