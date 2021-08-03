@@ -1,5 +1,6 @@
 import yfinance as yf
 from uranium_miner_valuations import *
+
 def get_data(ticker):
     s = yf.Ticker(ticker)
     return s.info
