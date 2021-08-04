@@ -70,5 +70,3 @@ def scrape_SPUT():
         "total_lbs": total_lbs
     }
 
-print(scrape_SPUT())
-
