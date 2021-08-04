@@ -1,6 +1,8 @@
 import yfinance as yf
 from uranium_miner_valuations import *
 from growth_valuations import *
+import requests
+from bs4 import BeautifulSoup
 
 def get_data(ticker):
     s = yf.Ticker(ticker)
@@ -28,3 +30,45 @@ def get_uranium_miner_valuation(ticker, price, discount_rate=0.08,capex_mult=1.0
         return get_azarga_valuation(price, discount_rate, capex_mult)
     else:
         return 0
+
+def parse_SPUT_format(s):
+    s = s.split(" ")[0]
+    s = s.replace("$US", "")
+    s = s.replace("%", "")
+    s = s.replace(",", "")
+    #cast to double rounded to 2 decimal places
+    return round(float(s), 2)
+def scrape_SPUT():
+    url = "https://www.sprott.com/investment-strategies/physical-commodity-funds/uranium/"
+    page = requests.get(url)
+    soup = BeautifulSoup(page.content, 'html.parser')
+    #find all classes with class=fundHeader_title
+    all_info = soup.find_all(class_="cell small-6 large-3 fundHeader_data")
+    market_price = 0
+    nav = 0
+    premium = 0 
+    total_lbs = 0
+    total_nav = 0
+    for info in all_info:
+        t = info.find(class_="fundHeader_title").text
+        d = " ".join(info.find(class_="fundHeader_value").text.split())
+        if t == "Market Price":
+            market_price = parse_SPUT_format(d)
+        elif t == "NAV":
+            nav = parse_SPUT_format(d)
+        elif t == "Premium/Discount":
+            premium = parse_SPUT_format(d)
+        elif t == "Total Net Asset Value":
+            total_nav = parse_SPUT_format(d)
+        elif t == "Total lbs of U3O8":
+            total_lbs = parse_SPUT_format(d)
+    return {
+        "market_price": market_price,
+        "nav": nav,
+        "premium": premium,
+        "total_nav": total_nav,
+        "total_lbs": total_lbs
+    }
+
+print(scrape_SPUT())
+

@@ -41,3 +41,7 @@ async def valuation(commodity: str, ticker: str, commodity_price: float, multipl
 async def growth(ticker: str, cagr: float, discount_rate: float = 0.08, 
                 terminal_growth: float = 0.03, speed_of_convergence: float = 2.5):
     return {"value": get_growth_valuation(ticker, cagr, discount_rate, terminal_growth, speed_of_convergence)}
+
+@app.get("/sput")
+async def sput():
+    return scrape_SPUT()
