@@ -70,3 +70,20 @@ def scrape_SPUT():
         "total_lbs": total_lbs
     }
 
+def parse_WNA_table():
+    URL = "https://world-nuclear.org/information-library/facts-and-figures/uranium-production-figures.aspx"
+    page = requests.get(URL)
+    soup = BeautifulSoup(page.content, 'html.parser')
+    table = soup.find({"table"})
+    table_head = table.find("thead")
+    table_body = table.find("tbody")
+    rows = table_body.find_all("tr")
+    data = []
+    for row in rows:
+        heading = row.find("th").text
+        cols = row.find_all("td")
+        cols = [ele.text.strip().replace(",","") for ele in cols]
+        data.append((heading, [ele for ele in cols if ele]))
+    print(data)
+
+parse_WNA_table()
