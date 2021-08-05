@@ -77,6 +77,12 @@ def get_supply_data():
         data = pickle.load(f)
     return data
 
+def get_demand_data():
+    #open pickle
+    with open("wna_demand_data.pkl", "rb") as f:
+        data = pickle.load(f)
+    return data
+
 def parse_WNA_table():
     URL = "https://world-nuclear.org/information-library/facts-and-figures/uranium-production-figures.aspx"
     page = requests.get(URL)
@@ -107,8 +113,30 @@ def parse_WNA_table():
         country_obj["country"] = country_name
         country_obj["supplyData"] = fd
         retobj.append(country_obj)
+    
+    tms = [] 
+    for total_mined_supply in data[-2][1]:
+        total_mined_supply_tonnes_U = float(total_mined_supply)
+        total_mined_supply_pounds_U = 2204.6 * total_mined_supply_tonnes_U
+        total_mined_supply_Mlbs_U = total_mined_supply_pounds_U / 1000000
+        tms.append(total_mined_supply_Mlbs_U)   
+    pwd = []
+    for percent_world_demand in data[-1][1]:
+        percent_world_demand = float(percent_world_demand.replace("%", ""))/100
+        pwd.append(percent_world_demand)
+    total_demand = []
+    for i in range(len(pwd)):
+        total_demand.append(tms[i] / pwd[i])
+    td = []
+    cnt = 0
+    for year in range(2010, 2020, 1):
+        td.append({"year": year, "demand" : total_demand[cnt]})
+        cnt+=1
+    print(td)
     #save retobj with pickle
     with open("wna_supply_data.pkl", "wb") as f:
         pickle.dump(retobj, f)
-
+    #save td with pickle
+    with open("wna_demand_data.pkl", "wb") as f:
+        pickle.dump(td, f)
 parse_WNA_table()

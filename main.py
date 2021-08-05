@@ -49,3 +49,7 @@ async def sput():
 @app.get("/data/uranium/supply")
 async def uranium_supply():
     return get_supply_data()
+
+@app.get("/data/uranium/demand")
+async def uranium_demand():
+    return get_demand_data()
