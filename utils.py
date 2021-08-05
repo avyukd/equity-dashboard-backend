@@ -104,7 +104,8 @@ def parse_WNA_table():
             Mlbs_U = pounds_U / 1000000
             fd.append({"year": year, "supply" : Mlbs_U})
             cnt+=1
-        country_obj[country_name] = fd
+        country_obj["country"] = country_name
+        country_obj["supplyData"] = fd
         retobj.append(country_obj)
     #save retobj with pickle
     with open("wna_supply_data.pkl", "wb") as f:
