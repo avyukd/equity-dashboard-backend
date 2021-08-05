@@ -45,3 +45,7 @@ async def growth(ticker: str, cagr: float, discount_rate: float = 0.08,
 @app.get("/sput")
 async def sput():
     return scrape_SPUT()
+
+@app.get("/data/uranium/supply")
+async def uranium_supply():
+    return get_supply_data()

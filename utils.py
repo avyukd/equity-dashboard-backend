@@ -3,6 +3,7 @@ from uranium_miner_valuations import *
 from growth_valuations import *
 import requests
 from bs4 import BeautifulSoup
+import pickle 
 
 def get_data(ticker):
     s = yf.Ticker(ticker)
@@ -70,6 +71,12 @@ def scrape_SPUT():
         "total_lbs": total_lbs
     }
 
+def get_supply_data():
+    #open pickle
+    with open("wna_supply_data.pkl", "rb") as f:
+        data = pickle.load(f)
+    return data
+
 def parse_WNA_table():
     URL = "https://world-nuclear.org/information-library/facts-and-figures/uranium-production-figures.aspx"
     page = requests.get(URL)
@@ -84,6 +91,23 @@ def parse_WNA_table():
         cols = row.find_all("td")
         cols = [ele.text.strip().replace(",","") for ele in cols]
         data.append((heading, [ele for ele in cols if ele]))
-    print(data)
+    retobj = []
+    for line in data[:-3]:
+        country_name = line[0]
+        country_data = line[1]
+        cnt = 0
+        country_obj = {}
+        fd = []
+        for year in range(2010, 2020, 1):
+            tonnes_U = float(country_data[cnt])
+            pounds_U = 2204.6 * tonnes_U
+            Mlbs_U = pounds_U / 1000000
+            fd.append({"year": year, "supply" : Mlbs_U})
+            cnt+=1
+        country_obj[country_name] = fd
+        retobj.append(country_obj)
+    #save retobj with pickle
+    with open("wna_supply_data.pkl", "wb") as f:
+        pickle.dump(retobj, f)
 
 parse_WNA_table()
