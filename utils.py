@@ -98,7 +98,7 @@ def parse_WNA_table():
         cols = [ele.text.strip().replace(",","") for ele in cols]
         data.append((heading, [ele for ele in cols if ele]))
     retobj = []
-    for line in data[:-3]:
+    for line in data[:2]:
         country_name = line[0]
         country_data = line[1]
         cnt = 0
@@ -113,9 +113,29 @@ def parse_WNA_table():
         country_obj["country"] = country_name
         country_obj["supplyData"] = fd
         retobj.append(country_obj)
-    
+
+    yearly_totals = {}
+    for line in data[2:-3]:
+        country_data = line[1]
+        cnt = 0
+        for year in range(2010, 2020, 1):
+            tonnes_U = float(country_data[cnt])
+            pounds_U = 2204.6 * tonnes_U
+            Mlbs_U = pounds_U / 1000000
+            if year not in yearly_totals:
+                yearly_totals[year] = Mlbs_U
+            else:
+                yearly_totals[year] += Mlbs_U
+            cnt+=1
+    ows = []
+    for year in range(2010, 2020, 1):
+        ows.append({"year":year, "supply":yearly_totals[year]})
+    other_nations_obj = {}
+    other_nations_obj["country"] = "Other Nations"
+    other_nations_obj["supplyData"] = ows
+    retobj.append(other_nations_obj)
     tms = [] 
-    for total_mined_supply in data[-2][1]:
+    for total_mined_supply in data[-3][1]:
         total_mined_supply_tonnes_U = float(total_mined_supply)
         total_mined_supply_pounds_U = 2204.6 * total_mined_supply_tonnes_U
         total_mined_supply_Mlbs_U = total_mined_supply_pounds_U / 1000000
