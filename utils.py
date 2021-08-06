@@ -134,23 +134,24 @@ def parse_WNA_table():
     other_nations_obj["country"] = "Other Nations"
     other_nations_obj["supplyData"] = ows
     retobj.append(other_nations_obj)
-    tms = [] 
-    for total_mined_supply in data[-3][1]:
-        total_mined_supply_tonnes_U = float(total_mined_supply)
-        total_mined_supply_pounds_U = 2204.6 * total_mined_supply_tonnes_U
-        total_mined_supply_Mlbs_U = total_mined_supply_pounds_U / 1000000
-        tms.append(total_mined_supply_Mlbs_U)   
-    pwd = []
+    tmd = [] 
+    for total_mined_demand in data[-2][1]:
+        total_mined_demand_tonnes_U = float(total_mined_demand)
+        total_mined_demand_pounds_U = 2204.6 * total_mined_demand_tonnes_U
+        total_mined_demand_Mlbs_U = total_mined_demand_pounds_U / 1000000
+        tmd.append(total_mined_demand_Mlbs_U)   
+    '''pwd = []
     for percent_world_demand in data[-1][1]:
         percent_world_demand = float(percent_world_demand.replace("%", ""))/100
         pwd.append(percent_world_demand)
     total_demand = []
     for i in range(len(pwd)):
-        total_demand.append(tms[i] / pwd[i])
+        total_demand.append(tms[i] / pwd[i])'''
+    print(data[-2][1])
     td = []
     cnt = 0
     for year in range(2010, 2020, 1):
-        td.append({"year": year, "demand" : total_demand[cnt]})
+        td.append({"year": year, "demand" : tmd[cnt]})
         cnt+=1
     print(td)
     #save retobj with pickle
