@@ -47,8 +47,8 @@ async def sput():
     return scrape_SPUT()
 
 @app.get("/data/uranium/supply")
-async def uranium_supply():
-    return get_supply_data()
+async def uranium_supply(long_term_underfeeding: float = 16.0):
+    return get_supply_data(long_term_underfeeding)
 
 @app.get("/data/uranium/demand")
 async def uranium_demand(growth_rate: float = 0.00):

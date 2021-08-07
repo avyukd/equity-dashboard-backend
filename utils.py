@@ -77,25 +77,23 @@ def get_supply_data(long_term_underfeeding):
         data = json.load(f)
     years = range(2016, 2031)
     toret = []
-
     supplyData = []
     for y in years:
         supplyData.append({'year':y, 'supply':6})
     toret.append({"source":"MOX", "supplyData": supplyData})
-
     supplyData = []
     for y in years:
         if y <= 2020:
-            supplyData.append({"year": y, "supply": data['supply_historical']["Underfeeding"][str(y)]})
+            s = data['supply_historical']["Underfeeding"][str(y)]
+            supplyData.append({"year": y, "supply": s})
         else:
             supplyData.append({"year":y, "supply": long_term_underfeeding})
     toret.append({"source":"Underfeeding", "supplyData": supplyData})
-
     supplyData = []
     for y in years:
-        supplyData.append({"year": y, "supply": data['supply_historical']["Mined Supply"][str(y)]})
+        s = data['supply_historical']["Mined Supply"][str(y)]
+        supplyData.append({"year": y, "supply": s})
     toret.append({"source":"Mined Supply", "supplyData": supplyData})
-
     return toret
 
 def get_demand_data(growth_rate):
@@ -197,4 +195,4 @@ def parse_WNA_table():
 '''
 
 #parse_WNA_table()
-print(get_supply_data())
+print(get_supply_data(10))
