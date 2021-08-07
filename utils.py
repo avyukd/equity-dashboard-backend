@@ -75,7 +75,8 @@ def scrape_SPUT():
     }
 
 def get_supply_data(long_term_underfeeding,
-    paladinFlag=False,globalFlag=False,mcarthurFlag=False):
+    paladinFlag=False,globalFlag=False,mcarthurFlag=False,
+    sputYr=0):
     #open pickle
     with open("uranium_supply_demand.json", "r") as f:
         data = json.load(f)
@@ -103,6 +104,7 @@ def get_supply_data(long_term_underfeeding,
                 s += data["global_production"][str(y)]
             if mcarthurFlag:
                 s += data["mcarthur_production"][str(y)]
+        s -= sputYr
         supplyData.append({"year": y, "supply": s})
     toret.append({"source":"Mined Supply", "supplyData": supplyData})
     return toret

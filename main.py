@@ -49,9 +49,10 @@ async def sput():
 @app.get("/data/uranium/supply")
 async def uranium_supply(long_term_underfeeding: float = 16.0, globalFlag: bool = False, 
                         mcarthurFlag: bool = False, paladinFlag: bool = False,
+                        sputYr: float = 0
 ):
     return get_supply_data(long_term_underfeeding, mcarthurFlag=mcarthurFlag, 
-                        paladinFlag=paladinFlag, globalFlag=globalFlag) 
+                        paladinFlag=paladinFlag, globalFlag=globalFlag, sputYr=sputYr) 
 
 @app.get("/data/uranium/demand")
 async def uranium_demand(growth_rate: float = 0.00):
