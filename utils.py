@@ -96,12 +96,13 @@ def get_supply_data(long_term_underfeeding,
     supplyData = []
     for y in years:
         s = data['supply_historical']["Mined Supply"][str(y)]
-        if paladinFlag:
-            s += data["paladin_production"][str(y)]
-        if globalFlag:
-            s += data["global_production"][str(y)]
-        if mcarthurFlag:
-            s += data["mcarthur_production"][str(y)]
+        if y > 2020:
+            if paladinFlag:
+                s += data["paladin_production"][str(y)]
+            if globalFlag:
+                s += data["global_production"][str(y)]
+            if mcarthurFlag:
+                s += data["mcarthur_production"][str(y)]
         supplyData.append({"year": y, "supply": s})
     toret.append({"source":"Mined Supply", "supplyData": supplyData})
     return toret
