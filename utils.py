@@ -71,11 +71,32 @@ def scrape_SPUT():
         "total_lbs": total_lbs
     }
 
-def get_supply_data():
+def get_supply_data(long_term_underfeeding):
     #open pickle
-    with open("wna_supply_data.pkl", "rb") as f:
-        data = pickle.load(f)
-    return data
+    with open("uranium_supply_demand.json", "r") as f:
+        data = json.load(f)
+    years = range(2016, 2031)
+    toret = []
+
+    supplyData = []
+    for y in years:
+        supplyData.append({'year':y, 'supply':6})
+    toret.append({"source":"MOX", "supplyData": supplyData})
+
+    supplyData = []
+    for y in years:
+        if y <= 2020:
+            supplyData.append({"year": y, "supply": data['supply_historical']["Underfeeding"][str(y)]})
+        else:
+            supplyData.append({"year":y, "supply": long_term_underfeeding})
+    toret.append({"source":"Underfeeding", "supplyData": supplyData})
+
+    supplyData = []
+    for y in years:
+        supplyData.append({"year": y, "supply": data['supply_historical']["Mined Supply"][str(y)]})
+    toret.append({"source":"Mined Supply", "supplyData": supplyData})
+
+    return toret
 
 def get_demand_data(growth_rate):
     #open uranium_supply_demand.json
@@ -176,3 +197,4 @@ def parse_WNA_table():
 '''
 
 #parse_WNA_table()
+print(get_supply_data())
