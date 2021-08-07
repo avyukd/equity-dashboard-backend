@@ -5,6 +5,9 @@ import requests
 from bs4 import BeautifulSoup
 import pickle 
 import json
+
+
+
 def get_data(ticker):
     s = yf.Ticker(ticker)
     return s.info
@@ -71,7 +74,8 @@ def scrape_SPUT():
         "total_lbs": total_lbs
     }
 
-def get_supply_data(long_term_underfeeding):
+def get_supply_data(long_term_underfeeding,
+    paladinFlag=False,globalFlag=False,mcarthurFlag=False):
     #open pickle
     with open("uranium_supply_demand.json", "r") as f:
         data = json.load(f)
@@ -92,6 +96,12 @@ def get_supply_data(long_term_underfeeding):
     supplyData = []
     for y in years:
         s = data['supply_historical']["Mined Supply"][str(y)]
+        if paladinFlag:
+            s += data["paladin_production"][str(y)]
+        if globalFlag:
+            s += data["global_production"][str(y)]
+        if mcarthurFlag:
+            s += data["mcarthur_production"][str(y)]
         supplyData.append({"year": y, "supply": s})
     toret.append({"source":"Mined Supply", "supplyData": supplyData})
     return toret
