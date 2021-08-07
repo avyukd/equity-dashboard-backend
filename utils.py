@@ -4,7 +4,7 @@ from growth_valuations import *
 import requests
 from bs4 import BeautifulSoup
 import pickle 
-
+import json
 def get_data(ticker):
     s = yf.Ticker(ticker)
     return s.info
@@ -77,12 +77,25 @@ def get_supply_data():
         data = pickle.load(f)
     return data
 
-def get_demand_data():
-    #open pickle
-    with open("wna_demand_data.pkl", "rb") as f:
-        data = pickle.load(f)
-    return data
+def get_demand_data(growth_rate):
+    #open uranium_supply_demand.json
+    with open("uranium_supply_demand.json", "r") as f:
+        data = json.load(f)
+    years = range(2016, 2031)
+    toret = []
+    lastyr_demand = 0
+    for y in years:
+        if y <= 2020:
+            demand = data['demand'][str(y)]
+            toret.append({"year": y, "demand": demand})
+            lastyr_demand = demand
+        else:
+            demand = lastyr_demand * (1 + growth_rate)
+            toret.append({"year": y, "demand": demand})
+            lastyr_demand = demand
+    return toret
 
+'''
 def parse_WNA_table():
     URL = "https://world-nuclear.org/information-library/facts-and-figures/uranium-production-figures.aspx"
     page = requests.get(URL)
@@ -140,13 +153,13 @@ def parse_WNA_table():
         total_mined_demand_pounds_U = 2204.6 * total_mined_demand_tonnes_U
         total_mined_demand_Mlbs_U = total_mined_demand_pounds_U / 1000000
         tmd.append(total_mined_demand_Mlbs_U)   
-    '''pwd = []
+    ''''''pwd = []
     for percent_world_demand in data[-1][1]:
         percent_world_demand = float(percent_world_demand.replace("%", ""))/100
         pwd.append(percent_world_demand)
     total_demand = []
     for i in range(len(pwd)):
-        total_demand.append(tms[i] / pwd[i])'''
+        total_demand.append(tms[i] / pwd[i])''''''
     print(data[-2][1])
     td = []
     cnt = 0
@@ -160,4 +173,6 @@ def parse_WNA_table():
     #save td with pickle
     with open("wna_demand_data.pkl", "wb") as f:
         pickle.dump(td, f)
-parse_WNA_table()
+'''
+
+#parse_WNA_table()

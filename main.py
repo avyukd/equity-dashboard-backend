@@ -51,5 +51,5 @@ async def uranium_supply():
     return get_supply_data()
 
 @app.get("/data/uranium/demand")
-async def uranium_demand():
-    return get_demand_data()
+async def uranium_demand(growth_rate: float = 0.00):
+    return get_demand_data(growth_rate)
