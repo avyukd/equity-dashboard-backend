@@ -1,4 +1,5 @@
 #create hello world fastapi app
+from macro_data import get_shiller_PE_data
 from fastapi import FastAPI, Query
 from utils import *
 from typing import Optional
@@ -57,3 +58,11 @@ async def uranium_supply(long_term_underfeeding: float = 16.0, globalFlag: bool 
 @app.get("/data/uranium/demand")
 async def uranium_demand(growth_rate: float = 0.00):
     return get_demand_data(growth_rate)
+
+'''@app.get("data/berkshire/cash")
+async def berk_cash():
+    return
+'''
+@app.get("date/cape")
+async def get_shiller_PE():
+    return get_shiller_PE_data()
