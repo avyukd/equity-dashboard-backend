@@ -74,3 +74,11 @@ async def get_feargreed_index():
 @app.get("/data/getindices")
 async def getindices():
     return get_indices()
+
+@app.get("/data/margin")
+async def margin():
+    return get_margin_debt_data()
+
+'''@app.get("/data/insider")
+async def insider_html():
+    return {"html":get_insider_html()}'''

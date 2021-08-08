@@ -7,6 +7,12 @@ import pickle
 import json
 
 
+def get_insider_html():
+    url = "http://openinsider.com/"
+    page = requests.get(url)
+    soup = BeautifulSoup(page.content, 'html.parser')
+    soup = soup.find("table")
+    return soup
 
 def get_data(ticker):
     s = yf.Ticker(ticker)
@@ -207,5 +213,4 @@ def parse_WNA_table():
         pickle.dump(td, f)
 '''
 
-#parse_WNA_table()
-print(get_supply_data(10))
+print(get_insider_html())
