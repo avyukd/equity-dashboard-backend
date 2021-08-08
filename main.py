@@ -1,5 +1,5 @@
 #create hello world fastapi app
-from macro_data import get_shiller_PE_data
+from macro_data import *
 from fastapi import FastAPI, Query
 from utils import *
 from typing import Optional
@@ -63,6 +63,14 @@ async def uranium_demand(growth_rate: float = 0.00):
 async def berk_cash():
     return
 '''
-@app.get("/date/cape")
+@app.get("/data/cape")
 async def get_shiller_PE():
     return get_shiller_PE_data()
+
+@app.get("/data/feargreed")
+async def get_feargreed_index():
+    return {"url":get_fear_greed_index()}
+
+@app.get("/data/getindices")
+async def getindices():
+    return get_indices()

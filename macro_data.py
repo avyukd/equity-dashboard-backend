@@ -1,15 +1,23 @@
 from bs4 import BeautifulSoup
 import requests
 from datetime import datetime
-'''def get_berkshire_cash_over_time():
-    brk = yf.Ticker("BRK-B")
-    qbs = brk.quarterly_balance_sheet
-    #get cash row of qbs dataframe
-    cash_row = qbs.loc['Cash']
-    #transpose the cash_row
-    cash_row = cash_row.transpose()
-    print(cash_row[:10])'''
+import yfinance as yf
 
+def get_fear_greed_index():
+    response = requests.get("https://money.cnn.com/data/fear-and-greed/")
+    soup = BeautifulSoup(response.text, "html.parser")
+    html_text = str(soup.find("div", {"id":"needleChart"}))
+    img_url = html_text.split("'")[1]
+    return img_url
+
+def get_indices():
+    nasdaq = yf.Ticker("^IXIC").info
+    sp500 = yf.Ticker("^GSPC").info
+    dow = yf.Ticker("^DJI").info
+    nasdaq_pct_change = (nasdaq["regularMarketPrice"] - nasdaq["previousClose"])/nasdaq["previousClose"] * 100
+    sp500_pct_change = (sp500["regularMarketPrice"] - sp500["previousClose"])/sp500["previousClose"] * 100
+    dow_pct_change = (dow["regularMarketPrice"] - dow["previousClose"])/dow["previousClose"] * 100
+    return {"nasdaq":nasdaq_pct_change, "sp500":sp500_pct_change, "dow":dow_pct_change}
 def date_helper(s):
     date_to_num = {"Jan":1,"Feb":2,"Mar":3,"Apr":4,"May":5,"Jun":6,"Jul":7,"Aug":8,"Sep":9,"Oct":10,"Nov":11,"Dec":12}
     #replace string
@@ -37,4 +45,5 @@ def get_shiller_PE_data():
     #reverse data
     data = data[::-1]
     return data
-print(get_shiller_PE_data())
+
+#print(get_indices())
