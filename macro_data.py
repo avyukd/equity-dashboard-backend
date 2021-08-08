@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 import requests
 from datetime import datetime
 import yfinance as yf
-
+import pandas as pd
 def get_fear_greed_index():
     response = requests.get("https://money.cnn.com/data/fear-and-greed/")
     soup = BeautifulSoup(response.text, "html.parser")
@@ -54,7 +54,7 @@ def date_helper_margin(s):
     month = date_to_num[s.split("-")[0]]
     day = 1
     raw_year = s.split("-")[1]
-    if "9" in raw_year:
+    if "9" == raw_year[0]:
         year = "19"+raw_year
     else:
         year = "20"+raw_year
@@ -67,14 +67,23 @@ def get_margin_debt_data():
     data = []
     for table in tables:
         rows = table.findAll("tr")
-        year_data = []
-        for row in rows:
-            cols = row.findAll("td")
-            if len(cols) >= 2:
-                date = date_helper_margin(cols[0].text)
-                debt = int(cols[1].text.replace(",",""))
-                year_data.append({"date":date, "debt":debt})
-        data+=year_data[::-1]
-    return data[::-1]
+        eoy_debt = rows[-1]
+        cols = eoy_debt.findAll("td")
+        if len(cols) == 1:
+            eoy_debt = rows[-2]
+            cols = eoy_debt.findAll("td")
+        if len(cols) >= 2:
+            date = date_helper_margin(cols[0].text)
+            debt = int(cols[1].text.replace(",",""))
+            data.append({"date":date, "debt":debt})
+    data = data[::-1]
+    #turn data into dataframe and get percent change
+    df = pd.DataFrame(data)
+    df["debt_pct_change"] = df["debt"].pct_change()
+    #remove first row of df
+    df = df[1:]
+    #turn df into array of dicts
+    df = df.to_dict("records")
+    return df
 #print(get_indices())
 print(get_margin_debt_data())
