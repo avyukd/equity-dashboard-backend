@@ -63,6 +63,6 @@ async def uranium_demand(growth_rate: float = 0.00):
 async def berk_cash():
     return
 '''
-@app.get("date/cape")
+@app.get("/date/cape")
 async def get_shiller_PE():
     return get_shiller_PE_data()
