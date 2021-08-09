@@ -79,6 +79,9 @@ async def getindices():
 async def margin():
     return get_margin_debt_data()
 
+@app.get("/search")
+async def search(q: str):
+    return openai_semantic_search(q)
 '''@app.get("/data/insider")
 async def insider_html():
     return {"html":get_insider_html()}'''

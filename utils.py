@@ -5,6 +5,7 @@ import requests
 from bs4 import BeautifulSoup
 import pickle 
 import json
+import openai
 
 
 def get_insider_html():
@@ -14,6 +15,17 @@ def get_insider_html():
     soup = soup.find("table")
     return soup
 
+def openai_semantic_search(query):
+    keys = json.load(open("keys.json"))
+    openai.api_key = keys["openai_key"]
+    response = openai.Engine("davinci").search(
+        search_model="davinci", 
+        query=query, 
+        max_rerank=10,
+        file="file-8Xkc89kV25PguBJkNqaG1Bxb",
+        return_metadata=True
+    )
+    return response
 def get_data(ticker):
     s = yf.Ticker(ticker)
     return s.info
