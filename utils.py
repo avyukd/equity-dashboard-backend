@@ -22,7 +22,7 @@ def openai_semantic_search(query):
         search_model="davinci", 
         query=query, 
         max_rerank=10,
-        file="file-8Xkc89kV25PguBJkNqaG1Bxb",
+        file="file-WRUnw4eMVT1oaiZrgTWXOogH",
         return_metadata=True
     )
     return response

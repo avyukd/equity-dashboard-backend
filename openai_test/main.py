@@ -7,7 +7,7 @@ import json
 import os 
 from unidecode import unidecode
 
-#bookmarks_8_8_21.html fileid = file-8Xkc89kV25PguBJkNqaG1Bxb
+#bookmarks_8_8_21.html fileid = file-WRUnw4eMVT1oaiZrgTWXOogH
 
 def get_bookmark_links():
     bookmarks_html = open('bookmarks_8_8_21.html', 'rb').read()
@@ -26,11 +26,15 @@ def create_initial_jsonl_file(length_limit=1500):
             print(link)
             try:
                 response = requests.get(link)
+                soup = BeautifulSoup(response.text, 'html.parser')
+                title = soup.find('title').text
+                title = unidecode(title)
+                title = " ".join(title.split())
                 text = html2text.html2text(response.text)
                 text = unidecode(text)
                 text = " ".join(text.split())
                 text = text[:length_limit]
-                data.append({"text":text, "metadata":link})
+                data.append({"text":text, "metadata":link+"\n"+title})
             except:
                 print("Error for " + link)
     with jsonlines.open('bookmarks_8-8.jsonl', mode='w') as writer:
@@ -50,12 +54,12 @@ def search_open_api(query):
         search_model="davinci", 
         query=query, 
         max_rerank=5,
-        file="file-8Xkc89kV25PguBJkNqaG1Bxb",
+        file="file-WRUnw4eMVT1oaiZrgTWXOogH",
         return_metadata=True
     )
     return response
 #create_initial_jsonl_file()
 #send_to_open_api("bookmarks_8-8.jsonl")
-while True:
-    q = input("Query: ")
-    print(search_open_api(q))
+#while True:
+#    q = input("Query: ")
+#    print(search_open_api(q)["data"][0].metadata.split("\n"))
