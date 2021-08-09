@@ -7,7 +7,7 @@ import json
 import os 
 from unidecode import unidecode
 
-#bookmarks_8_8_21.html fileid = file-VMURdo3KC0WveUqFWw6MvSof
+#bookmarks_8_8_21.html fileid = file-8Xkc89kV25PguBJkNqaG1Bxb
 
 def get_bookmark_links():
     bookmarks_html = open('bookmarks_8_8_21.html', 'rb').read()
@@ -50,12 +50,12 @@ def search_open_api(query):
         search_model="davinci", 
         query=query, 
         max_rerank=5,
-        file="file-VMURdo3KC0WveUqFWw6MvSof",
+        file="file-8Xkc89kV25PguBJkNqaG1Bxb",
         return_metadata=True
     )
     return response
-create_initial_jsonl_file()
-send_to_open_api("bookmarks_8-8.jsonl")
-#while True:
-#    q = input("Query: ")
-#    print(search_open_api(q))
+#create_initial_jsonl_file()
+#send_to_open_api("bookmarks_8-8.jsonl")
+while True:
+    q = input("Query: ")
+    print(search_open_api(q))
