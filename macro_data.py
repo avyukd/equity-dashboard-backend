@@ -86,4 +86,4 @@ def get_margin_debt_data():
     df = df.to_dict("records")
     return df
 #print(get_indices())
-print(get_margin_debt_data())
+#print(get_margin_debt_data())

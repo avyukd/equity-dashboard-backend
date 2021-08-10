@@ -42,4 +42,4 @@ def get_pltr_valuation(CAGR=0.20, discount_rate=0.08,terminal_growth_rate=0.03, 
     TV /= (1 + discount_rate) ** 10
     return PV + TV
 
-print(get_pltr_valuation(0.3,0.08,0.03,2.5))
+#print(get_pltr_valuation(0.3,0.08,0.03,2.5))

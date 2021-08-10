@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
-from . import models, schemas
+import models
+import schemas
 
 def get_ticker(db: Session, ticker: str):
     return db.query(models.Watchlist).filter(models.Watchlist.ticker == ticker).first()
