@@ -1,12 +1,29 @@
 #create hello world fastapi app
 from macro_data import *
-from fastapi import FastAPI, Query
+from fastapi import FastAPI, Query, Depends, HTTPException
 from utils import *
 from typing import Optional
 from typing import List
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy.orm import Session
+from . import crud, models, schemas
+from .database import SessionLocal, engine
+
+
+models.Base.metadata.create_all(bind=engine)
+
 
 app = FastAPI()
+
+# Dependency
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+
 origins = ["*"]
 app.add_middleware(
     CORSMiddleware,
@@ -19,6 +36,15 @@ app.add_middleware(
 @app.get("/")
 def root():
     return {"message": "Welcome to the Server!"}
+
+@app.post("/watchlist/", response_model=schemas.WatchList)
+def add_watchlist_entry(watchlistEntry: schemas.WatchListCreate, db: Session = Depends(get_db)):
+    return crud.add_to_watchlist(db=db, watchlist_entry=watchlistEntry)
+
+@app.get("/watchlist/", response_model=List[schemas.WatchList])
+def get_watchlist(limit: int = 100, db: Session = Depends(get_db)):
+    return crud.get_tickers(db=db, limit=limit)
+
 
 @app.get("/equities/quote")
 async def quote(ticker: str, columns: Optional[List[str]] = Query(["marketCap","regularMarketPrice"])):
