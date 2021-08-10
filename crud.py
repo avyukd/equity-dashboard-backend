@@ -15,3 +15,8 @@ def add_to_watchlist(db: Session, watchlist_entry: schemas.WatchListCreate):
     db.commit()
     db.refresh(db_watchlist_entry)
     return db_watchlist_entry
+
+def delete_from_watchlist(db: Session, ticker: str):
+    db.query(models.Watchlist).filter(models.Watchlist.ticker == ticker).delete()
+    db.commit()
+    

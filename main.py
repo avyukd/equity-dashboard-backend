@@ -48,6 +48,13 @@ def get_watchlist(limit: int = 100, db: Session = Depends(get_db)):
     return crud.get_tickers(db=db, limit=limit)
 
 
+@app.delete("/watchlist/{ticker}")
+def delete_watchlist_entry(ticker: str, db: Session = Depends(get_db)):
+    return crud.delete_from_watchlist(db=db, ticker=ticker)
+
+@app.get("/watchlist/{id}", response_model=schemas.WatchList)
+
+
 @app.get("/equities/quote")
 async def quote(ticker: str, columns: Optional[List[str]] = Query(["marketCap","regularMarketPrice"])):
     return_dict = {}
