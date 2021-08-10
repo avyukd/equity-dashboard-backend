@@ -1,0 +1,13 @@
+jsonlines==2.0.0
+openai==0.10.2
+html2text==2020.1.16
+requests==2.22.0
+yfinance==0.1.63
+numpy==1.21.1
+pandas_stubs==1.2.0.1
+pydantic==1.7.4
+Unidecode==1.2.0
+SQLAlchemy==1.4.22
+beautifulsoup4==4.9.3
+fastapi==0.68.0
+pandas==1.3.1
