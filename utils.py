@@ -99,6 +99,23 @@ def scrape_SPUT():
         "total_lbs": total_lbs
     }
 
+def get_vidler_water_valuation(LTSC_price):
+    #two main assets: LTSCs (water credits) and FSR (fish spring ranch)
+    #Vidler LTSCs
+    Harquahala_LTSCs = 250683
+    Phoenix_LTSCs = 28147
+    #LTSC value is opaque, ranges between 150 and over 1500
+    #likely to be close to around 350-400 range
+    total_LTSC = Harquahala_LTSCs + Phoenix_LTSCs
+    LTSC_value = total_LTSC * LTSC_price
+
+    #FSR + Carson-Lyon value from balance sheet (treated as intangible assets, valued using DCF)
+    intangible_water_assets = 120
+    tangible_assets = 12
+    cash = 10
+
+    return LTSC_value + intangible_water_assets + tangible_assets + cash
+    
 def get_supply_data(long_term_underfeeding,
     paladinFlag=False,globalFlag=False,mcarthurFlag=False,
     sputYr=0):
