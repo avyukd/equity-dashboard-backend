@@ -69,7 +69,7 @@ async def valuation(commodity: str, ticker: str, commodity_price: float, multipl
     elif commodity == "coal":
         return {"value": get_coal_miner_valuation(ticker, commodity_price, ebitda_mult)}
     elif commodity == "water":
-        return {"Value": get_vidler_water_valuation(LTSC_price=commodity_price)}
+        return {"value": get_vidler_water_valuation(LTSC_price=commodity_price)}
     else:
         return {"value":0}
 
