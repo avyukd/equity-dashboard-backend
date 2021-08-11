@@ -1,6 +1,7 @@
 import yfinance as yf
 from uranium_miner_valuations import *
 from growth_valuations import *
+from coal_miner_valuation import *
 import requests
 from bs4 import BeautifulSoup
 import pickle 
@@ -30,6 +31,12 @@ def get_data(ticker):
     s = yf.Ticker(ticker)
     return s.info
 
+def get_coal_miner_valuation(ticker, coal_price, ebitda_mult):
+    ticker = ticker.upper()
+    if ticker == "BTU":
+        return BTU_valuation(coal_price, ebitda_mult)
+    else:
+        return 0
 def get_growth_valuation(ticker, cagr, discount_rate, terminal_growth_rate, speed_of_convergence):
     ticker = ticker.upper()
     if ticker == "PLTR":
