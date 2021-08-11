@@ -108,14 +108,14 @@ def get_vidler_water_valuation(LTSC_price):
     #likely to be close to around 350-400 range
     total_LTSC = Harquahala_LTSCs + Phoenix_LTSCs
     LTSC_value = total_LTSC * LTSC_price
-
+    LTSC_value /= 1000000
     #FSR + Carson-Lyon value from balance sheet (treated as intangible assets, valued using DCF)
     intangible_water_assets = 120
     tangible_assets = 12
     cash = 10
 
     return LTSC_value + intangible_water_assets + tangible_assets + cash
-    
+
 def get_supply_data(long_term_underfeeding,
     paladinFlag=False,globalFlag=False,mcarthurFlag=False,
     sputYr=0):
@@ -248,5 +248,3 @@ def parse_WNA_table():
     with open("wna_demand_data.pkl", "wb") as f:
         pickle.dump(td, f)
 '''
-
-print(get_insider_html())
