@@ -1,4 +1,4 @@
-def BTU_valuation(coal_price, EBITDA_multiple=3):
+def BTU_valuation(coal_price, EBITDA_multiple):
     #coal price is newcastle thermal
     #will apply EV/EBITDA valuation for 1 yr time horizon
     #reasonable EBITDA_multiple of 3 
@@ -16,6 +16,6 @@ def BTU_valuation(coal_price, EBITDA_multiple=3):
     Q_EBITDA = SEABORNE_MET_EBITDA + PRB_EBITDA + THERMAL_EBITDA
     Y_EBITDA = 4 * Q_EBITDA
 
-    EV = (3 * Y_EBITDA)
+    EV = (EBITDA_multiple * Y_EBITDA)
     mcap = EV - DEBT + CASH
     return mcap
