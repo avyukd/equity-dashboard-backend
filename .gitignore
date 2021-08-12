@@ -1,3 +1,4 @@
 keys.json
 dashboard.db
 test_files/
+*.jsonl

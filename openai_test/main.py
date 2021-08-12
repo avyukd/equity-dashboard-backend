@@ -9,6 +9,7 @@ from requests.api import get
 from unidecode import unidecode
 import textract
 import nltk
+from requests.structures import CaseInsensitiveDict
 #bookmarks_8_8_21.html fileid = file-WRUnw4eMVT1oaiZrgTWXOogH
 
 def get_bookmark_links():
@@ -71,12 +72,14 @@ def get_text_for_answers(filepath):
 
 def create_openai_file(filepath):
     sentences = get_text_for_answers(filepath)
-    with jsonlines.open('u_answers.jsonl', mode='w') as writer:
-            for sentence in sentences:
-                writer.write({"text":sentence})  
+    with jsonlines.open('answers.jsonl', mode='w') as writer:
+        cnt = 0
+        for sentence in sentences:
+            writer.write({"text":sentence, "metadata":str(cnt)})  
+            cnt += 1
     keys = json.load(open("../keys.json"))
     openai.api_key = keys["openai_key"]
-    response = openai.File.create(file=open("u_answers.jsonl"), purpose="answers")
+    response = openai.File.create(file=open("answers.jsonl"), purpose="answers")
     print(response)
 
 def get_answers_from_open_api(query, fileid="file-nfohV7tdAeMPEmJzha1xLjwm",num_results=5):
@@ -94,13 +97,28 @@ def get_answers_from_open_api(query, fileid="file-nfohV7tdAeMPEmJzha1xLjwm",num_
 def delete_file(fileid):
     keys = json.load(open("../keys.json"))
     openai.api_key = keys["openai_key"]
-    https://api.openai.com/v1/files/{file_id}
+    #delete request using requests library
+    url = "https://api.openai.com/v1/files/"+fileid
+    headers = CaseInsensitiveDict()
+    headers["Authorization"] = "Bearer "+keys["openai_key"]
+    response = requests.delete(url, headers=headers)
+    print(response.content)
 
-#create_openai_file("test_files/uranium.pdf")
+#delete_file("file-FkMSygR4oB9BcIGs3ycktu8u")
+
+#create_openai_file("test_files/mml-book.pdf")
+
+sentences = get_text_for_answers("test_files/mml-book.pdf")
 while True:
     q = input("Enter a question: ")
-    print(get_answers_from_open_api(query=q,num_results=1))
+    all_data = get_answers_from_open_api(query=q,fileid="file-XdYldjkRt2DbPMVSHbHA2e8W",num_results=1)["data"]
+    for data in all_data:
+        index = int(data["metadata"])
+        print(sentences[index-3:index+3])
 #uranium answers id: file-nfohV7tdAeMPEmJzha1xLjwm
+#dcma rfp id: file-BTozQfpsqzuJYWSP9eyEG9Me
+#coal answers id: file-rlWEPIXGvq3H0UViLrRVf5ue
+#machine learning book: file-XdYldjkRt2DbPMVSHbHA2e8W
 
 #create_initial_jsonl_file()
 #send_to_open_api("bookmarks_8-8.jsonl")
