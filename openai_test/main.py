@@ -4,9 +4,11 @@ import html2text
 import jsonlines
 import openai
 import json 
-import os 
+import os
+from requests.api import get 
 from unidecode import unidecode
-
+import textract
+import nltk
 #bookmarks_8_8_21.html fileid = file-WRUnw4eMVT1oaiZrgTWXOogH
 
 def get_bookmark_links():
@@ -58,6 +60,48 @@ def search_open_api(query):
         return_metadata=True
     )
     return response
+
+def get_text_for_answers(filepath):
+    text = textract.process(filepath).decode("utf-8")
+    #tokenize the text into sentences
+    text = unidecode(text)
+    text = " ".join(text.split())
+    sentences = nltk.sent_tokenize(text)
+    return sentences
+
+def create_openai_file(filepath):
+    sentences = get_text_for_answers(filepath)
+    with jsonlines.open('u_answers.jsonl', mode='w') as writer:
+            for sentence in sentences:
+                writer.write({"text":sentence})  
+    keys = json.load(open("../keys.json"))
+    openai.api_key = keys["openai_key"]
+    response = openai.File.create(file=open("u_answers.jsonl"), purpose="answers")
+    print(response)
+
+def get_answers_from_open_api(query, fileid="file-nfohV7tdAeMPEmJzha1xLjwm",num_results=5):
+    keys = json.load(open("../keys.json"))
+    openai.api_key = keys["openai_key"]
+    response = openai.Engine("davinci").search(
+        search_model="davinci", 
+        query=query, 
+        max_rerank=num_results,
+        file=fileid,
+        return_metadata=True
+    )
+    return response
+
+def delete_file(fileid):
+    keys = json.load(open("../keys.json"))
+    openai.api_key = keys["openai_key"]
+    https://api.openai.com/v1/files/{file_id}
+
+#create_openai_file("test_files/uranium.pdf")
+while True:
+    q = input("Enter a question: ")
+    print(get_answers_from_open_api(query=q,num_results=1))
+#uranium answers id: file-nfohV7tdAeMPEmJzha1xLjwm
+
 #create_initial_jsonl_file()
 #send_to_open_api("bookmarks_8-8.jsonl")
 #while True:
