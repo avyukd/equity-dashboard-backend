@@ -10,7 +10,7 @@ import crud
 import models
 import schemas
 from database import SessionLocal, engine
-
+from pydantic import BaseModel
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -117,6 +117,15 @@ async def margin():
 @app.get("/search")
 async def search(q: str):
     return openai_semantic_search(q)
+
+class Notes(BaseModel):
+    notes: str
+
+@app.post("/notes/{ticker}")
+async def notes(ticker: str, notes: Notes):
+    jsonNotes = json.loads(notes.notes)
+    print(jsonNotes)
+    return "working"
     
 '''@app.get("/data/insider")
 async def insider_html():

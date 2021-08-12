@@ -50,7 +50,7 @@ def get_shiller_PE_data():
 
 def date_helper_margin(s):
     date_to_num = {"Jan":1,"Feb":2,"Mar":3,"Apr":4,"May":5,"Jun":6,"June":6,"Jul":7,"Aug":8,
-                "Sept":9,"Sep":9,"Oct":10,"Nov":11,"Dec":12}
+                "Sept":9,"Sep":9,"Oct":10,"Nov":11,"Dec":12,"July":7}
     month = date_to_num[s.split("-")[0]]
     day = 1
     raw_year = s.split("-")[1]
@@ -86,4 +86,4 @@ def get_margin_debt_data():
     df = df.to_dict("records")
     return df
 #print(get_indices())
-print(get_margin_debt_data())
+#print(get_margin_debt_data())
