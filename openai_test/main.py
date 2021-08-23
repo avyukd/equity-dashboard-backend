@@ -106,19 +106,23 @@ def delete_file(fileid):
 
 #delete_file("file-FkMSygR4oB9BcIGs3ycktu8u")
 
-#create_openai_file("test_files/mml-book.pdf")
+#create_openai_file("./test_files/baba10k.pdf")
 
-sentences = get_text_for_answers("test_files/mml-book.pdf")
+sentences = get_text_for_answers("test_files/baba10k.pdf")
 while True:
     q = input("Enter a question: ")
-    all_data = get_answers_from_open_api(query=q,fileid="file-XdYldjkRt2DbPMVSHbHA2e8W",num_results=1)["data"]
+    all_data = get_answers_from_open_api(query=q,fileid="file-Vkurt3RrZ7Qz8MOfgYzYgAf5",num_results=1)["data"]
     for data in all_data:
         index = int(data["metadata"])
         print(sentences[index-3:index+3])
+
+ 
 #uranium answers id: file-nfohV7tdAeMPEmJzha1xLjwm
 #dcma rfp id: file-BTozQfpsqzuJYWSP9eyEG9Me
 #coal answers id: file-rlWEPIXGvq3H0UViLrRVf5ue
 #machine learning book: file-XdYldjkRt2DbPMVSHbHA2e8W
+#baba 10k: file-Vkurt3RrZ7Qz8MOfgYzYgAf5
+
 
 #create_initial_jsonl_file()
 #send_to_open_api("bookmarks_8-8.jsonl")
