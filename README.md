@@ -1,6 +1,6 @@
 # Equity Dashboard
 
-A personal dashboard to help me keep track of my investments. Built with FastAPI and React. Backend here: https://github.com/avyukd/equity-dashboard-backend. 
+A personal dashboard to help me keep track of my investments. Built with FastAPI and React. Frontend here: https://github.com/avyukd/equity-dashboard. 
 
 To run locally: 
 - frontend: yarn start
